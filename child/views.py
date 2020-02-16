@@ -176,7 +176,7 @@ def searchresult(request):
   email=EmailMessage(mail_subject,message,to=[to_email])
   email.send()
   messages.success(request,f'We have sent the confirmation mail')
-  return render(request,'child/index.html')
+  return redirect('/child')
  # return render(request,'child/searchresult.html',{'profile':profile})
 
 def activate(request,uidb64,token,year):
@@ -188,6 +188,7 @@ def activate(request,uidb64,token,year):
     user=None
   if user is not None and account_activation_token.check_token(user,token):
     child1.perms=True
+    child1.uperms=year
     child1.save()
     return HttpResponse('<h2>Access Granted</h2>')
   else:
@@ -199,10 +200,11 @@ def deletefromlost(request,id):
 
 def childdetails(request):
   conn = sqlite3.connect("db.sqlite3")
-  cmd = "SELECT * from child_esehi WHERE perms=1"
+  cmd = "SELECT * from child_esehi WHERE perms=1 AND uperms="+str(request.user.pk)
   cursor = conn.execute(cmd)
   profile=None
   for row in cursor:
+    print(row)
     profile = row
   conn.close()
   return render(request,'child/searchresult.html',{'profile':profile})

@@ -9,6 +9,7 @@ class esehi(models.Model):
 	zip1=models.IntegerField()
 	image=models.ImageField(upload_to='profile_image',blank=False)
 	perms=models.BooleanField(default=False)
+	uperms=models.IntegerField(default=0)
 	def __str__(self):
 		return self.name
 #class lost(models.Model):
