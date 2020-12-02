@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-class esehi(models.Model):
+class Member(models.Model):
 	user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 	name=models.CharField(max_length=70)
 	mobilenumber=models.IntegerField()

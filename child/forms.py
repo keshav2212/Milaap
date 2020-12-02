@@ -1,5 +1,5 @@
 from django import forms
-from child.models import esehi
+from child.models import Member
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -41,7 +41,7 @@ class addmemberform(forms.ModelForm):
 		))
 	image=forms.ImageField()
 	class Meta:
-		model=esehi
+		model=Member
 		fields=['name','mobilenumber','gender','address','zip1','image']
 class UserRegisterForm(UserCreationForm):
 	email=forms.EmailField()

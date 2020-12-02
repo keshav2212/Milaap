@@ -1,5 +1,4 @@
 import os
-import js2py
 import sqlite3
 from django.template.loader import render_to_string
 import cv2
@@ -16,7 +15,7 @@ from django.core.mail import send_mail
 from child.forms import addmemberform
 from django.template import Template,Context
 from .forms import UserRegisterForm
-from .models import esehi
+from .models import Member
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
@@ -35,11 +34,12 @@ def register(request):
   else:
     form=UserRegisterForm()
   return render(request,'child/register.html',{"form":form})
+
 @login_required
 def congrats(request):
   faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
   cam=cv2.VideoCapture(0)
-  members=esehi.objects.all()
+  members=Member.objects.all()
   id=0
   for member in members:
     if(id<member.id):
@@ -77,15 +77,20 @@ def congrats(request):
   recognizer.train(faces,np.array(Ids))
   recognizer.write('recognizer/trainningData.yml')
   return render(request,'child/congrats.html')
+
 @login_required
 def laststep(request):
   return render(request,'child/laststep.html')
+
 def home(request):
   return render(request,'child/index.html')
+
 def login(request):
 	return render(request,'child/login.html')
+
 def success(request): 
     return HttpResponse('successfuly uploaded')
+
 @login_required
 def addmember(request):
   if request.method == 'POST':
@@ -98,26 +103,33 @@ def addmember(request):
   else:
     form = addmemberform()
   return render(request, 'child/addmember.html',{"form":form})
+
 def aboutus(request):
 	return render(request,'child/aboutus.html')
+
 def howitworks(request):
 	return render(request,'child/howitworks.html')
+
 @login_required
 def dashboard(request):
   return render(request,'child/dashboard.html')
+
 @login_required
 def allmembers(request):
-  print((esehi.objects.all().count()) > 0)
+  print((Member.objects.all().count()) > 0)
   return render(request,'child/allmembers.html')
+
 @login_required
 def searchmember(request):
   return render(request,'child/searchmember.html')
+
 @login_required
 def addtolost(request,id):
-  data = esehi.objects.filter(id=id).values()
+  data = Member.objects.filter(id=id).values()
 #  u=lost(**data[0])
 #  u.save()
   return render(request,'child/addtolost.html')
+
 def display_ip():
     """  Function To Print GeoIP Latitude & Longitude """
     ip_request = requests.get('https://get.geojs.io/v1/ip.json')
@@ -126,12 +138,13 @@ def display_ip():
     geo_data = geo_request.json()
     a=[geo_data['region'],geo_data['latitude'],geo_data['longitude']]
     return a
+
 @login_required
 def searchresult(request):
   faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
   def getans(Id):
         conn = sqlite3.connect("db.sqlite3")
-        cmd = "SELECT * from child_esehi WHERE id="+str(Id)
+        cmd = "SELECT * from child_Member WHERE id="+str(Id)
         cursor = conn.execute(cmd)
         profile = None
         for row in cursor:
@@ -183,7 +196,7 @@ def activate(request,uidb64,token,year):
   try:
     child_id=force_text(urlsafe_base64_decode(uidb64))
     user=User.objects.get(pk=year)
-    child1=esehi.objects.get(pk=child_id)
+    child1=Member.objects.get(pk=child_id)
   except (TypeError,ValueError,OverflowError,User.DoesNotExist):
     user=None
   if user is not None and account_activation_token.check_token(user,token):
@@ -200,11 +213,9 @@ def deletefromlost(request,id):
 
 def childdetails(request):
   conn = sqlite3.connect("db.sqlite3")
-  cmd = "SELECT * from child_esehi WHERE perms=1 AND uperms="+str(request.user.pk)
-  cursor = conn.execute(cmd)
-  profile=None
-  for row in cursor:
-    print(row)
-    profile = row
-  conn.close()
+  cmd = Member.objects.filter(perms=1,uperms=str(request.user.pk)) 
+  try:
+    profile=cmd[0]
+  except:
+    profile=None
   return render(request,'child/searchresult.html',{'profile':profile})
