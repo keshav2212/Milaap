@@ -52,15 +52,15 @@
         <a class="nav-link" href="/child/">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/child/howitworks">How it's work</a>
+        <a class="nav-link" href="{% url 'howitworks' %}">How it's work</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/child/aboutus">About Us</a>
+        <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
       </li>
         </ul>
         </div>
         <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="/child/childdetails">Child Details</a>
-        <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="/child/logout">Logout</a>
+        <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="{% url 'logout' %}">Logout</a>
        
 </nav></br>
 <h2>Hello, {{user}}!</h2>
@@ -70,7 +70,7 @@
   <div class="card-body">
     <h5 class="card-title">Add Member</h5>
     <p class="card-text">In this section, You can add new Members</p>
-    <a href="/child/addmember" class="btn btn-primary">Go to Add</a>
+    <a href="{% url 'addmember' %}" class="btn btn-primary">Go to Add</a>
   </div></div>
 </div><div class="col-sm-3 col-xs-3 col-md-3">
 <div class="card" style="width: 18rem;">
@@ -80,16 +80,16 @@
     <p class="card-text">
       Search Parents or any family member to unknown person.
     </p>
-    <a href="/child/search" class="btn btn-primary">Go to Search</a>
+    <a href="{% url 'search' %}" class="btn btn-primary">Go to Search</a>
   </div></div>
 </div>
 <div class="col-sm-3 col-xs-3 col-md-3">
 <div class="card" style="width: 18rem;">
-  <img src='/media/child/members.png'members.png" class="card-img-top" alt="...">
+  <img src='/media/child/members.png' class="card-img-top" alt="...">
   <div class="card-body">
     <h5 class="card-title">Show Members</h5>
     <p class="card-text">You can see all the member of you account which you had added.</p>
-    <a href="/child/allmembers" class="btn btn-primary">Go to Members</a>
+    <a href="{% url 'allmembers' %}" class="btn btn-primary">Go to Members</a>
   </div>
 </div>
 </div>

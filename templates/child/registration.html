@@ -11,14 +11,14 @@
         <a class="nav-link" href="/child">Home <span class="sr-only"></span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/child/howitworks">How it's work</a>
+        <a class="nav-link" href="{% url 'howitworks' %}">How it's work</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/child/aboutus">About Us</a>
+        <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
       </li>
         </ul>
         </div>
-      <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="/child/login">Login</a>
+      <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="{% url 'login' %}">Login</a>
       <a class="btn btn-outline-success my-2 my-sm-0 active" href="/child/registration">Registration</a>
   
 </nav>
