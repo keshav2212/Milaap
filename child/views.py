@@ -15,25 +15,57 @@ from django.core.mail import send_mail
 from child.forms import addmemberform
 from django.template import Template,Context
 from .forms import UserRegisterForm
-from .models import Member
+from .models import Member,phone
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 import requests
+from django.contrib.auth import authenticate,login,logout
 
 def register(request):
   if request.method=='POST':
-    form=UserRegisterForm(request.POST)
-    if form.is_valid():
-      form.save()
-      username=form.cleaned_data.get('username')
-      messages.success(request,f'Account Created for {username}!')
+    username=request.POST['username']
+    password=request.POST['password']
+    cpassword=request.POST['password1']
+    mobilenumber=request.POST['number']
+    email=request.POST['email']
+    if password==cpassword:
+      user=User.objects.create_user(username,email,password)
+      user.first_name=request.POST['firstname'] 
+      user.last_name=request.POST['lastname']
+      user.save()
+      contact=phone()
+      contact.user=user
+      contact.number=mobilenumber
+      contact.save()
+      messages.success(request,'%s has been Registered Successfully'%user.username)
       return redirect('/child/login')
-  else:
-    form=UserRegisterForm()
-  return render(request,'child/register.html',{"form":form})
+    else:
+      messages.error(request,"Your password didn't match!")
+      return redirect('/register')
+  return render(request,'child/register.html')
+
+def login1(request):
+  if request.method=='POST':
+    lusername=request.POST['username']
+    lpassword=request.POST['password']
+    user=authenticate(username=lusername,password=lpassword)
+    if user is not None:
+      login(request,user)
+      messages.success(request,"%s has been logged Successfully"%user.username)
+      return redirect('/child/dashboard')
+    else:
+      messages.error(request,'Invalid Username or Pssword')
+      return redirect('/child/login')
+  return render(request,'child/login.html')
+
+@login_required
+def logout1(request):
+  logout(request)
+  messages.success(request,'You have been logout Successfully')
+  return redirect('/child')
 
 @login_required
 def congrats(request):
@@ -85,24 +117,30 @@ def laststep(request):
 def home(request):
   return render(request,'child/index.html')
 
-def login(request):
-	return render(request,'child/login.html')
-
 def success(request): 
     return HttpResponse('successfuly uploaded')
 
 @login_required
 def addmember(request):
-  if request.method == 'POST':
-    form = addmemberform(request.POST,request.FILES)
-    if form.is_valid():
-      form1=form.save(commit=False)
-      form1.user=request.user
-      form1.save()
-      return redirect('/child/laststep')
-  else:
-    form = addmemberform()
-  return render(request, 'child/addmember.html',{"form":form})
+  if request.method=="POST":
+    name=request.POST['name']
+    number=request.POST['number']
+    gender=request.POST['gender']
+    print(gender)
+    address=request.POST['address']
+    code=request.POST['pincode']
+    img=request.FILES['image']
+    mem=member()
+    mem.user=request.user
+    mem.name=name
+    mem.mobilenumber=number
+    mem.gender=gender
+    mem.address=address
+    mem.postalcode=code
+    mem.image=img
+    mem.save()
+    return redirect('/child/laststep')
+  return render(request,'child/addmember.html')
 
 def aboutus(request):
 	return render(request,'child/aboutus.html')

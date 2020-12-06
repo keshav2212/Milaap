@@ -12,6 +12,11 @@ class Member(models.Model):
 	uperms=models.IntegerField(default=0)
 	def __str__(self):
 		return self.name
+class phone(models.Model):
+	user=models.OneToOneField(User,on_delete=models.CASCADE)
+	number=models.BigIntegerField()
+	def __str__(self):
+		return self.user.username
 #class lost(models.Model):
 #	user = models.ForeignKey(esehi,on_delete=models.CASCADE,null=True)
 #	name=models.CharField(max_length=70)
