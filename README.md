@@ -11,7 +11,7 @@ This project does not only helps in founding the information of the lost child b
 ## Screenshots :
 
 ![alt text](./docs/images/Home.PNG?raw=true width="50%")
-
+<img src="https://github.com/keshav2212/Milaap/blob/master/docs/images/Home.PNG" width="50%">
 
 ![alt text](./docs/images/dashboard.PNG?raw=true "Dashboard")
 
