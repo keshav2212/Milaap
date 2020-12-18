@@ -10,7 +10,7 @@ This project does not only helps in founding the information of the lost child b
 
 ## Screenshots :
 
-![alt text](./docs/images/Home.PNG?raw=true "Home")
+![alt text](./docs/images/Home.PNG?raw=true width="50%")
 
 
 ![alt text](./docs/images/dashboard.PNG?raw=true "Dashboard")
