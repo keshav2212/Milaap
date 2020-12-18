@@ -6,3 +6,8 @@ The webcam is used for scanning the image of the lost child which then search fo
 When the image of the lost child is found in the database it sends a request to the head of the family member to whether to show the information of the child or not.  
 If the head accepts the request, all the information of the child will be visible to the person who found the child and the person's coordinates will also be send to the head of the family.  
 This project does not only helps in founding the information of the lost child but also helps in recognizing the information of the people who are caught in any accident or in natural calamity.
+
+
+## Screenshots :
+
+![alt text](https://github.com/keshav2212/Milaap/blob/master/docs/images/Home.PNG?raw=true)
