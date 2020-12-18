@@ -10,4 +10,4 @@ This project does not only helps in founding the information of the lost child b
 
 ## Screenshots :
 
-![alt text](https://github.com/keshav2212/Milaap/blob/master/docs/images/Home.PNG?raw=true)
+![alt text](./docs/images/Home.PNG?raw=true)
