@@ -1,12 +1,13 @@
 # Milaap
 
-It is a web application that use to obtain the details of family of a lost child using face recognition with 2 step authentication system.
-It is built using **Django, OpenCV and Sqlite3 Database** for storing the information of the family.
-The webcam is used for scanning the image of the lost child which then search for the similar image in the database.  
-When the image of the lost child is found in the database it sends a request to the head of the family member to whether to show the information of the child or not.  
-If the head accepts the request, all the information of the child will be visible to the person who found the child and the person's coordinates will also be send to the head of the family.  
-This project does not only helps in founding the information of the lost child but also helps in recognizing the information of the people who are caught in any accident or in natural calamity.
+#### A web application which helps people to find the family of the lost child in crowded area using face recognition with secure two factor authentication.
+* Built using **Django, OpenCV and Sqlite3 Database** for storing the information of the family.
+* Scan the image of the lost child using of webcam or mobile camera then it shows the similar results from the database.  
+* Genrate & Send a information access request containing cordinates of requester to family head to authenticate the absence of his/her child.
+* After authentication grant, requester able to access contact details of family.
+* Helps in recognizing the information of the people who are caught in any accident or in natural calamity.
 
+Link : https://milaapp.herokuapp.com/ (Under Development)
 
 ## Screenshots :
 
