@@ -10,4 +10,18 @@ This project does not only helps in founding the information of the lost child b
 
 ## Screenshots :
 
-![alt text](./docs/images/Home.PNG?raw=true)
+![alt text](./docs/images/Home.PNG?raw=true "Home")
+
+
+![alt text](./docs/images/dashboard.PNG?raw=true "Dashboard")
+
+
+![alt text](./docs/images/New.PNG?raw=true "Add Member")
+
+
+![alt text](./docs/images/Search.PNG?raw=true "Find Family")
+
+
+![alt text](./docs/images/Members.PNG?raw=true "Members List")
+
+
