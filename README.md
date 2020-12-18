@@ -10,7 +10,11 @@ This project does not only helps in founding the information of the lost child b
 
 ## Screenshots :
 
-* ![alt text](./docs/images/Home.PNG?raw=true)
+* ### Home
 
-* ![alt text](./docs/images/dashboard.PNG?raw=true)
+![alt text](./docs/images/Home.PNG?raw=true)
+
+* ### Dashboard
+
+![alt text](./docs/images/dashboard.PNG?raw=true)
 
