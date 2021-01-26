@@ -130,13 +130,13 @@ def addmember(request):
     address=request.POST['address']
     code=request.POST['pincode']
     img=request.FILES['image']
-    mem=member()
+    mem=Member()
     mem.user=request.user
     mem.name=name
     mem.mobilenumber=number
     mem.gender=gender
     mem.address=address
-    mem.postalcode=code
+    mem.zip1=code
     mem.image=img
     mem.save()
     return redirect('/child/laststep')
@@ -154,7 +154,6 @@ def dashboard(request):
 
 @login_required
 def allmembers(request):
-  print((Member.objects.all().count()) > 0)
   return render(request,'child/allmembers.html')
 
 @login_required
@@ -214,21 +213,21 @@ def searchresult(request):
         break;
   cam.release()
   cv2.destroyAllWindows()
-  current_site=get_current_site(request)
-  mail_subject='Give Permisssion to access Details of child'
-  ip_request = requests.get('https://get.geojs.io/v1/ip.json')
-  my_ip = ip_request.json()['ip']  # ip_request.json() => {ip: 'XXX.XXX.XX.X'}
-  geo_request_url = 'https://get.geojs.io/v1/ip/geo/' + my_ip + '.json'
-  geo_request = requests.get(geo_request_url)
-  geo_data = geo_request.json()
-  r=display_ip()
-  message = render_to_string('child/acc_active_email.html',{'user':request.user,'domain':current_site.domain,'uid':urlsafe_base64_encode(force_bytes(id)),'token':account_activation_token.make_token(request.user),'region':r[0],'long':r[1],'lat':r[2]})
-  to_email='akeshav53@gmail.com'
-  email=EmailMessage(mail_subject,message,to=[to_email])
-  email.send()
-  messages.success(request,f'We have sent the confirmation mail')
-  return redirect('/child')
- # return render(request,'child/searchresult.html',{'profile':profile})
+  #current_site=get_current_site(request)
+  #mail_subject='Give Permisssion to access Details of child'
+  #ip_request = requests.get('https://get.geojs.io/v1/ip.json')
+  #my_ip = ip_request.json()['ip']  # ip_request.json() => {ip: 'XXX.XXX.XX.X'}
+  #geo_request_url = 'https://get.geojs.io/v1/ip/geo/' + my_ip + '.json'
+  #geo_request = requests.get(geo_request_url)
+  #geo_data = geo_request.json()
+  #r=display_ip()
+  #message = render_to_string('child/acc_active_email.html',{'user':request.user,'domain':current_site.domain,'uid':urlsafe_base64_encode(force_bytes(id)),'token':account_activation_token.make_token(request.user),'region':r[0],'long':r[1],'lat':r[2]})
+  #to_email='akeshav53@gmail.com'
+  #email=EmailMessage(mail_subject,message,to=[to_email])
+  #email.send()
+  #messages.success(request,f'We have sent the confirmation mail')
+  #return redirect('/child')
+  return render(request,'child/searchresult.html',{'profile':profile})
 
 def activate(request,uidb64,token,year):
   try:
