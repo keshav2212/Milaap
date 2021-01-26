@@ -13,7 +13,7 @@ Link : https://milaapp.herokuapp.com/ (Under Development)
 
 * ### Home
 
-![alt text](./docs/images/Home.PNG?raw=true)
+![alt text](./docs/images/home.png?raw=true)
 
 * ### Dashboard
 
