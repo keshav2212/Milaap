@@ -134,8 +134,6 @@ LOGIN_REDIRECT_URL='/child/dashboard/'
 LOGIN_EXEMPT_URLS={
     'child/logout/',
     'child/registration/',
-    'child/aboutus/',
-    'child/howitworks/',
     'child/',
        
 }

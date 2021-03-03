@@ -142,12 +142,6 @@ def addmember(request):
     return redirect('/child/laststep')
   return render(request,'child/addmember.html')
 
-def aboutus(request):
-	return render(request,'child/aboutus.html')
-
-def howitworks(request):
-	return render(request,'child/howitworks.html')
-
 @login_required
 def dashboard(request):
   return render(request,'child/dashboard.html')
