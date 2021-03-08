@@ -128,5 +128,6 @@ dmypy.json
 .pyre/
 
 
+db.sqlite3
 DataSet/
 child/media/profile_image
