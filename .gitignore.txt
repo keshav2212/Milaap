@@ -1,4 +1,3 @@
-DataSet
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -130,5 +129,5 @@ dmypy.json
 
 
 db.sqlite3
-Dataset/
+DataSet/
 child/media/profile_image
