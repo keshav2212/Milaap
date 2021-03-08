@@ -130,3 +130,5 @@ dmypy.json
 
 
 db.sqlite3
+Dataset/
+child/media/profile_image
