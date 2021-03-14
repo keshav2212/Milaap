@@ -12,9 +12,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 from PIL import Image
 from django.core.mail import send_mail
-from child.forms import addmemberform
 from django.template import Template,Context
-from .forms import UserRegisterForm
 from .models import Member,phone
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
@@ -23,6 +21,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 import requests
 from django.contrib.auth import authenticate,login,logout
+from django.urls import reverse
 
 def register(request):
   if request.method=='POST':
@@ -126,7 +125,6 @@ def addmember(request):
     name=request.POST['name']
     number=request.POST['number']
     gender=request.POST['gender']
-    print(gender)
     address=request.POST['address']
     code=request.POST['pincode']
     img=request.FILES['image']
@@ -197,7 +195,6 @@ def searchresult(request):
         id,conf=rec.predict(gray[y:y+h,x:x+w])
         profile = getans(id)
         if profile!=None:
-          print(profile)
           cv2.destroyAllWindows()
           flag=1
           break
@@ -250,3 +247,10 @@ def childdetails(request):
   except:
     profile=None
   return render(request,'child/searchresult.html',{'profile':profile})
+def deletemember(request,memberid):
+  s=Member.objects.get(id=memberid)
+  t=s.name
+  s.delete()
+  msg="%s has been removed successfully."%t;
+  messages.success(request,'%s has been Removed Successfully'%t)
+  return render(request,'child/allmembers.html')

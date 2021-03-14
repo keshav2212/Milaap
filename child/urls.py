@@ -23,4 +23,5 @@ urlpatterns=[
     path('deletefromlost/<int:id>',views.deletefromlost,name='deletefromlost'),
     url(r'^activate/<slug:uidb64>/<slug:token>/(?P<year>[0-9]{1,10})/$',views.activate, name='activate'),
     path('childdetails/',views.childdetails),
+    path('<int:memberid>',views.deletemember,name='deletemember')
 ]

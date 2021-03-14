@@ -37,7 +37,16 @@
         <a class="btn btn-outline-success my-2 my-sm-0 mr-3" href="{% url 'logout' %}">Logout</a>
        
 </nav>
-      <div class="container" style="padding-top: 3%;">
+<div class="container" style="padding-top: 3%;">
+{% if messages %}
+{% for message in messages %}
+<div class='alert alert-{{ message.tags }}'>
+  {{ message }}
+</div>
+{% endfor %}
+<a href="/child/dashboard">Go Back To Dashboard</a> 
+  {% endif %}
+
         {% for esehi in user.member_set.all %}
       <div class="card mb-3" style="max-width: 540px;">
   <div class="row no-gutters">
@@ -50,14 +59,40 @@
         <p class="card-text">
         {{esehi.gender}}
       </p>
-        <p class="card-text"><small class="text-muted">{{esehi.address}}</br>{{esehi.mobilenumber}}</small></p>
-        
+        <p class="card-text"><small class="text-muted">{{esehi.address}}<br>{{esehi.mobilenumber}}</small></p>
+      </div>
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalLong" style="float: right;margin-top: -25%;margin-right: 10%;">
+      Delete
+      </button>
+      <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete Member</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are You Sure Want to delete this member ?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a href="{% url 'deletemember' esehi.id %}" class="btn btn-danger">Delete</a>
       </div>
     </div>
   </div>
 </div>
+    </div>
+  </div>
+</div>
 {% endfor %}
-      </div>
+</div>
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+
 {%endblock%}
 
 
