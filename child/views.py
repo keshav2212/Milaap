@@ -70,11 +70,8 @@ def logout1(request):
 def congrats(request):
   faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
   cam=cv2.VideoCapture(0)
-  members=Member.objects.all()
-  id=0
-  for member in members:
-    if(id<member.id):
-      id=member.id
+  mem=list(Member.objects.all())[-1]
+  id=mem.id
   sample=0
   while(True):
     ret,img=cam.read()
