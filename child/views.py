@@ -26,10 +26,6 @@ from django.conf import settings
 
 def train():
   recognizer=cv2.face.LBPHFaceRecognizer_create();
-  try:
-    os.mkdir(settings.BASE_DIR+"/DataSet")
-  except:
-    None
   path='DataSet'
   def getImageWithID(path):
     imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
@@ -102,6 +98,10 @@ def congrats(request):
   mem=list(Member.objects.all())[-1]
   id=mem.id
   sample=0
+  try:
+    os.mkdir(settings.BASE_DIR+"/DataSet")
+  except:
+    None
   while(True):
     ret,img=cam.read()
     gray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)

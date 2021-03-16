@@ -132,3 +132,4 @@ db.sqlite3
 DataSet/
 child/media/profile_image
 recognizer
+keshu/__pycache__
