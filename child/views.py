@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 from PIL import Image
 from django.core.mail import send_mail
 from django.template import Template,Context
-from .models import Member,phone
+from .models import Member
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
@@ -22,6 +22,35 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 import requests
 from django.contrib.auth import authenticate,login,logout
 from django.urls import reverse
+from django.conf import settings
+
+def train():
+  recognizer=cv2.face.LBPHFaceRecognizer_create();
+  try:
+    os.mkdir(settings.BASE_DIR+"/DataSet")
+  except:
+    None
+  path='DataSet'
+  def getImageWithID(path):
+    imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
+    faces=[]
+    IDs=[]
+    for imagePath in imagePaths:
+      faceImg=Image.open(imagePath).convert('L')
+      facenp=np.array(faceImg,'uint8')
+      ID=int(os.path.split(imagePath)[-1].split('.')[1])
+      faces.append(facenp)
+      IDs.append(ID)
+      cv2.waitKey(10)
+    return IDs,faces
+  Ids,faces=getImageWithID(path)
+  recognizer.train(faces,np.array(Ids))
+  try:
+    os.mkdir(settings.BASE_DIR+'/recognizer')
+  except:
+    None
+  recognizer.write('recognizer/trainningData.yml')
+  return None
 
 def register(request):
   if request.method=='POST':
@@ -87,23 +116,8 @@ def congrats(request):
         break
   cam.release()
   cv2.destroyAllWindows()
-  recognizer=cv2.face.LBPHFaceRecognizer_create();
-  path='DataSet'
-  def getImageWithID(path):
-    imagePaths=[os.path.join(path,f) for f in os.listdir(path)]
-    faces=[]
-    IDs=[]
-    for imagePath in imagePaths:
-      faceImg=Image.open(imagePath).convert('L')
-      facenp=np.array(faceImg,'uint8')
-      ID=int(os.path.split(imagePath)[-1].split('.')[1])
-      faces.append(facenp)
-      IDs.append(ID)
-      cv2.waitKey(10)
-    return IDs,faces
-  Ids,faces=getImageWithID(path)
-  recognizer.train(faces,np.array(Ids))
-  recognizer.write('recognizer/trainningData.yml')
+  train()
+  x=Member.objects.filter(id=id).update(trained=True)
   return render(request,'child/congrats.html')
 
 @login_required
@@ -143,18 +157,12 @@ def dashboard(request):
 
 @login_required
 def allmembers(request):
-  return render(request,'child/allmembers.html')
+  members=Member.objects.filter(user=request.user)
+  return render(request,'child/allmembers.html',{'members':members,'len':len(members)})
 
 @login_required
 def searchmember(request):
   return render(request,'child/searchmember.html')
-
-@login_required
-def addtolost(request,id):
-  data = Member.objects.filter(id=id).values()
-#  u=lost(**data[0])
-#  u.save()
-  return render(request,'child/addtolost.html')
 
 def display_ip():
     """  Function To Print GeoIP Latitude & Longitude """
@@ -169,17 +177,18 @@ def display_ip():
 def searchresult(request):
   faceDetect=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
   def getans(Id):
-        conn = sqlite3.connect("db.sqlite3")
-        cmd = "SELECT * from child_Member WHERE id="+str(Id)
-        cursor = conn.execute(cmd)
-        profile = None
-        for row in cursor:
-            profile = row
-        conn.close()
-        return profile
+    profile=None
+    try:
+      profile=Member.objects.get(id=Id)
+    except:
+      None
+    return profile
   cam=cv2.VideoCapture(0)
   rec=cv2.face.LBPHFaceRecognizer_create();
-  rec.read('recognizer\\trainningData.yml')
+  try:
+    rec.read('recognizer\\trainningData.yml')
+  except:
+    return HttpResponse("There are no Members in our database to search with")
   id=0
   flag=0
   font=cv2.FONT_HERSHEY_COMPLEX_SMALL
@@ -217,37 +226,26 @@ def searchresult(request):
   #return redirect('/child')
   return render(request,'child/searchresult.html',{'profile':profile})
 
-def activate(request,uidb64,token,year):
-  try:
-    child_id=force_text(urlsafe_base64_decode(uidb64))
-    user=User.objects.get(pk=year)
-    child1=Member.objects.get(pk=child_id)
-  except (TypeError,ValueError,OverflowError,User.DoesNotExist):
-    user=None
-  if user is not None and account_activation_token.check_token(user,token):
-    child1.perms=True
-    child1.uperms=year
-    child1.save()
-    return HttpResponse('<h2>Access Granted</h2>')
-  else:
-    return HttpResponse('activation link is invalid!')
 
-def deletefromlost(request,id):
-  #lost.objects.filter(id=id).delete()
-  return HttpResponse("Member has been successfully removed from lost list of our database.")
-
-def childdetails(request):
-  conn = sqlite3.connect("db.sqlite3")
-  cmd = Member.objects.filter(perms=1,uperms=str(request.user.pk)) 
-  try:
-    profile=cmd[0]
-  except:
-    profile=None
-  return render(request,'child/searchresult.html',{'profile':profile})
+@login_required
 def deletemember(request,memberid):
   s=Member.objects.get(id=memberid)
   t=s.name
+  image=s.image
   s.delete()
+  for sample in range(1,22):
+    try:
+      os.remove('DataSet/User.'+str(memberid)+"."+str(sample)+'.jpg')
+    except:
+      None
+  os.remove('child/media/'+str(image))
+  if len(Member.objects.filter(trained=True))!=0:
+    train()
+  else:
+    try:
+      os.remove('recognizer/trainningData.yml')
+    except:
+      None
   msg="%s has been removed successfully."%t;
   messages.success(request,'%s has been Removed Successfully'%t)
   return render(request,'child/allmembers.html')

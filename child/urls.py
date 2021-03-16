@@ -19,9 +19,5 @@ urlpatterns=[
     path('congrats/',views.congrats),
     path('search/',views.searchmember,name='search'),
     path('searchresult/',views.searchresult),
-    path('addtolost/<int:id>',views.addtolost,name='addtolost'),
-    path('deletefromlost/<int:id>',views.deletefromlost,name='deletefromlost'),
-    url(r'^activate/<slug:uidb64>/<slug:token>/(?P<year>[0-9]{1,10})/$',views.activate, name='activate'),
-    path('childdetails/',views.childdetails),
-    path('<int:memberid>',views.deletemember,name='deletemember')
+    path('<int:memberid>',views.deletemember,name='deletemember'),
 ]

@@ -46,8 +46,10 @@
 {% endfor %}
 <a href="/child/dashboard">Go Back To Dashboard</a> 
   {% endif %}
-
-        {% for esehi in user.member_set.all %}
+{% if len is 0 %}
+  <h1 style="text-align: center;">You have not added any member yet.</h1>
+{% endif %}
+{% for esehi in user.member_set.all %}
       <div class="card mb-3" style="max-width: 540px;">
   <div class="row no-gutters">
     <div class="col-md-4">
@@ -55,7 +57,7 @@
     </div>
     <div class="col-md-8">
       <div class="card-body">
-        <h5 class="card-title">{{esehi.name}} </h5>
+        <h5 class="card-title">{{esehi.id}} {{esehi.name}} </h5>
         <p class="card-text">
         {{esehi.gender}}
       </p>

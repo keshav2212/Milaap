@@ -8,15 +8,9 @@ class Member(models.Model):
 	address=models.CharField(max_length=100)
 	zip1=models.IntegerField()
 	image=models.ImageField(upload_to='profile_image',blank=False)
-	perms=models.BooleanField(default=False)
-	uperms=models.IntegerField(default=0)
+	trained=models.BooleanField(default=False)
 	def __str__(self):
 		return self.name
-class phone(models.Model):
-	user=models.OneToOneField(User,on_delete=models.CASCADE)
-	number=models.BigIntegerField()
-	def __str__(self):
-		return self.user.username
 #class lost(models.Model):
 #	user = models.ForeignKey(esehi,on_delete=models.CASCADE,null=True)
 #	name=models.CharField(max_length=70)
