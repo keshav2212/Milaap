@@ -1,6 +1,6 @@
 certifi==2020.11.8
 chardet==3.0.4
-Django==2.2.6
+Django==2.2.18
 idna==2.10
 numpy==1.19.5
 opencv-python==4.1.0.25
