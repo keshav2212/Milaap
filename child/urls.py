@@ -20,4 +20,6 @@ urlpatterns=[
     path('search/',views.searchmember,name='search'),
     path('searchresult/',views.searchresult),
     path('<int:memberid>',views.deletemember,name='deletemember'),
+    path('allowuser/<int:id>',views.allowuser,name='allowuser'),
+    path('allowuser',views.alloweduser,name='allowedusers'),
 ]

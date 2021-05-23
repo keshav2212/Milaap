@@ -23,6 +23,9 @@ import requests
 from django.contrib.auth import authenticate,login,logout
 from django.urls import reverse
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 
 def train():
   recognizer=cv2.face.LBPHFaceRecognizer_create();
@@ -111,7 +114,6 @@ def congrats(request):
         cv2.imwrite('DataSet/User.'+str(id)+"."+str(sample)+'.jpg',gray[y:y+h,x:x+w])
         cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
         cv2.waitKey(100)
-    cv2.imshow("Face",img);
     if(sample>20):
         break
   cam.release()
@@ -210,21 +212,18 @@ def searchresult(request):
         break;
   cam.release()
   cv2.destroyAllWindows()
-  #current_site=get_current_site(request)
-  #mail_subject='Give Permisssion to access Details of child'
-  #ip_request = requests.get('https://get.geojs.io/v1/ip.json')
-  #my_ip = ip_request.json()['ip']  # ip_request.json() => {ip: 'XXX.XXX.XX.X'}
-  #geo_request_url = 'https://get.geojs.io/v1/ip/geo/' + my_ip + '.json'
-  #geo_request = requests.get(geo_request_url)
-  #geo_data = geo_request.json()
-  #r=display_ip()
-  #message = render_to_string('child/acc_active_email.html',{'user':request.user,'domain':current_site.domain,'uid':urlsafe_base64_encode(force_bytes(id)),'token':account_activation_token.make_token(request.user),'region':r[0],'long':r[1],'lat':r[2]})
-  #to_email='akeshav53@gmail.com'
-  #email=EmailMessage(mail_subject,message,to=[to_email])
-  #email.send()
-  #messages.success(request,f'We have sent the confirmation mail')
-  #return redirect('/child')
-  return render(request,'child/searchresult.html',{'profile':profile})
+  current_site=get_current_site(request)
+  to_email = profile.user.email
+  Member.objects.filter(id=profile.id).update(missing = {'user':request.user.id,'Given':False})
+  subject='Verify You Family Member Absence'
+  r=display_ip()
+  html_message = render_to_string('child/acc_active_email.html',context={'user':request.user,'profile':profile,'uid':urlsafe_base64_encode(force_bytes(id)),'url':"http://%s/child/allowuser/%s"%(current_site.domain,profile.id),'region':r[0],'long':r[1],'lat':r[2]})
+  plain_message = strip_tags(html_message)
+  x = send_mail(subject,plain_message,settings.EMAIL_HOST_USER,[to_email], html_message=html_message,fail_silently = True)
+  if x==1:
+    messages.success(request,f'We have sent the confirmation mail')
+  return redirect('/child')
+  #return render(request,'child/searchresult.html',{'profile':profile})'token':account_activation_token.make_token(request.user)
 
 
 @login_required
@@ -249,3 +248,20 @@ def deletemember(request,memberid):
   msg="%s has been removed successfully."%t;
   messages.success(request,'%s has been Removed Successfully'%t)
   return render(request,'child/allmembers.html')
+
+
+def allowuser(request,id):
+  x = Member.objects.get(id=id).missing
+  x['Given'] = True
+  print(x)
+  Member.objects.filter(id=id).update(missing=x)
+  return HttpResponse("We have give him access, we will inform him to connect you, we wish your member will be back to you safely as soon as possible.")
+
+def alloweduser(request):
+  profiles = Member.objects.all()
+  accessed = []
+  for pro in profiles:
+    if pro.missing['user'] == request.user.id and pro.missing['Given']:
+      accessed.append(pro)
+  return render(request,'child/allowedusers.html',{'accessed':accessed})
+#http://{{domain}}{% url 'activate' uidb64=uid token=token year=user.id %}
