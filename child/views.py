@@ -63,10 +63,6 @@ def register(request):
       user.first_name=request.POST['firstname'] 
       user.last_name=request.POST['lastname']
       user.save()
-      contact=phone()
-      contact.user=user
-      contact.number=mobilenumber
-      contact.save()
       messages.success(request,'%s has been Registered Successfully'%user.username)
       return redirect('/child/login')
     else:
@@ -261,7 +257,10 @@ def alloweduser(request):
   profiles = Member.objects.all()
   accessed = []
   for pro in profiles:
-    if pro.missing['user'] == request.user.id and pro.missing['Given']:
-      accessed.append(pro)
+    try:
+      if pro.missing['user'] == request.user.id and pro.missing['Given']:
+        accessed.append(pro)
+    except:
+      pass
   return render(request,'child/allowedusers.html',{'accessed':accessed})
 #http://{{domain}}{% url 'activate' uidb64=uid token=token year=user.id %}
