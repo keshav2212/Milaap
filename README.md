@@ -7,7 +7,7 @@
 * After authentication grant, requester able to access contact details of family.
 * Helps in recognizing the information of the people who are caught in any accident or in natural calamity.
 
-Link : https://milaapp.herokuapp.com/ (Under Development)
+Link : https://milaapp.herokuapp.com/child (Under Development)
 
 ## Screenshots :
 
